@@ -275,73 +275,7 @@
 						"exec": [
 							"pm.collectionVariables.set('deviceId', pm.collectionVariables.get(\"deviceId\"))\r",
 							"pm.collectionVariables.set('sensorId', pm.collectionVariables.get(\"sensorId\"))\r",
-							"pm.collectionVariables.set('command1Value', \"44.0\")\r",
-							"pm.collectionVariables.set(\"counter\", 0)\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://{{baseUrl}}/command/set_value?sensorId={{sensorId}}&deviceId={{deviceId}}&value={{command1Value}}",
-					"protocol": "http",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"command",
-						"set_value"
-					],
-					"query": [
-						{
-							"key": "sensorId",
-							"value": "{{sensorId}}"
-						},
-						{
-							"key": "deviceId",
-							"value": "{{deviceId}}"
-						},
-						{
-							"key": "value",
-							"value": "{{command1Value}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Command Set Value POST",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 202\", () => {",
-							"  pm.response.to.have.status(202);",
-							"});",
-							"console.log(pm.request)",
-							"console.log(pm.response)"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"pm.collectionVariables.set('deviceId', pm.collectionVariables.get(\"deviceId\"))\r",
-							"pm.collectionVariables.set('sensorId', pm.collectionVariables.get(\"sensorId\"))\r",
-							"pm.collectionVariables.set('command1Value', \"44.0\")\r",
+							"pm.collectionVariables.set('command1Value', \"44.4\")\r",
 							""
 						],
 						"type": "text/javascript"
@@ -472,7 +406,62 @@
 			"response": []
 		},
 		{
-			"name": "Command Set Value POST Incorrect Value",
+			"name": "Check Parameter Value",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"console.log(pm.request)",
+							"console.log(pm.response)",
+							"const response = pm.response.json(); // Parse the response",
+							"",
+							"pm.test(\"Test Parameter Value is Correct\", function () {",
+							"    pm.expect(\"\" + response.value).is.eqls(pm.collectionVariables.get(\"command1Value\"));",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/management/sensors/{{sensorId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"management",
+						"sensors",
+						"{{sensorId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Command Set Value Incorrect Value",
 			"event": [
 				{
 					"listen": "test",
@@ -535,6 +524,61 @@
 							"key": "value",
 							"value": "{{command2Value}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Parameter Value Not Changed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"console.log(pm.request)",
+							"console.log(pm.response)",
+							"const response = pm.response.json(); // Parse the response",
+							"",
+							"pm.test(\"Test Parameter is not changed\", function () {",
+							"    pm.expect(\"\" + response.value).is.eqls(pm.collectionVariables.get(\"command1Value\"));",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{baseUrl}}/management/sensors/{{sensorId}}",
+					"protocol": "http",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"management",
+						"sensors",
+						"{{sensorId}}"
 					]
 				}
 			},
@@ -618,75 +662,6 @@
 					],
 					"path": [
 						"notifications"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Command Add Value",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 202\", () => {",
-							"  pm.response.to.have.status(202);",
-							"});",
-							"console.log(pm.request)",
-							"console.log(pm.response)"
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{ \"sensorId\": \"34d78b0d-0986-4904-af1d-7065fe0fbe96\", \"deviceId\": \"64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc\", \"value\": \"1.0\" }"
-				},
-				"url": {
-					"raw": "http://{{baseUrl}}/command/add_value?sensorId=34d78b0d-0986-4904-af1d-7065fe0fbe96&deviceId=64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc&value=1.0",
-					"protocol": "http",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"command",
-						"add_value"
-					],
-					"query": [
-						{
-							"key": "sensorId",
-							"value": "34d78b0d-0986-4904-af1d-7065fe0fbe96"
-						},
-						{
-							"key": "deviceId",
-							"value": "64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc"
-						},
-						{
-							"key": "value",
-							"value": "1.0"
-						}
 					]
 				}
 			},
