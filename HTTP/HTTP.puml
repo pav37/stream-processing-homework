@@ -1,0 +1,29 @@
+@startuml
+actor User
+participant "Command service"
+participant "Device management service"
+participant "Notification service"
+skinparam defaultTextAlignment center
+skinparam sequenceMessageAlign center
+
+User -> "Command service" : POST /command_set_value
+Activate "Command service"
+||7||
+"Command service" -> "Device management service" : POST /set_value
+Activate "Device management service"
+||7||
+"Device management service" --> "Command service" : Response 202 ACCEPTED
+Deactivate "Device management service"
+
+"Command service" -> "Notification service" : POST /send_email
+
+Activate "Notification service"
+||7||
+"Notification service" --> "Command service" : Response 202 ACCEPTED
+"Notification service" -> "Notification service" : Send Email
+Deactivate "Notification service"
+
+"Command service" -> User : Response OK
+||7||
+Deactivate "Command service"
+@enduml

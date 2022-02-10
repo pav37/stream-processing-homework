@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Отправка команд на устройства
+  version: 0.1.0
+tags:
+  - name: command
+    description: Сервис отправки команд
+  - name: device-management
+    description: Сервис управления устройствами
+paths:
+  '/Commands/{commandId}':
+    get:
+      tags:
+        - Command
+      summary: Ресурс команды по ID
+      description: Вернуть данные о команде
+      operationId: getCommandById
+      parameters:
+        - name: commandId
+          in: path
+          description: ID команды
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command'
+        '404':
+          description: Такой команды нет
+
+  '/devices/{deviceId}':
+    get:
+      tags:
+        - device-management
+      summary: Ресурс устройства по ID
+      description: Вернуть данные по устройству
+      operationId: getDeviceById
+      parameters:
+        - name: deviceId
+          in: path
+          description: ID устройства
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '404':
+          description: Такого устройства нет
+
+components:
+  schemas:
+    Command:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+        sensorId:
+          type: string
+          format: uuid
+        value:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+      required:
+        - deviceId
+        - sensorId
+        - value
+        - username
+        - email
+    Device:
+      type: object
+      properties:
+        deviceId:
+          type: string
+          format: uuid
+        sensorId:
+          type: string
+          format: uuid
+        parameterName:
+          type: string
+        value:
+          type: string
+        userGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+              name:
+                type: string
+

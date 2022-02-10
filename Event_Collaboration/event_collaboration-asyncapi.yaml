@@ -1,0 +1,79 @@
+asyncapi: 2.0.0
+info:
+  title: Отправка команд
+  version: '1.0.0'
+defaultContentType: application/json
+
+channels:
+  command-service/value_set:
+    publish:
+      message:
+        tags:
+          - name: command
+        name: send command
+        title: Пользователь отправил команду
+        payload:
+           type: object
+           properties:
+             id:
+               type: string
+               format: uuid
+             deviceId:
+               type: string
+               format: uuid
+             sensorId:
+               type: string
+               format: uuid
+             value:
+               type: string
+             username:
+               type: string
+             email:
+               type: string
+           required:
+             - id
+             - deviceId
+             - sensorId
+             - value
+             - username
+             - email
+        examples:
+          - payload:
+              id: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              deviceId: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              sensorId: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              value: 5.0
+              username: Tyshawn
+              email: "user@example.org"
+
+  device-management/value_set_approved:
+    publish:
+      message:
+        name: value_set_approved
+        title: Значение изменено
+        payload:
+           type: object
+           properties:
+             id:
+               type: string
+               format: uuid
+             deviceId:
+               type: string
+               format: uuid
+             sensorId:
+               type: string
+               format: uuid
+             value:
+               type: string
+             username:
+               type: string
+             email:
+               type: string
+        examples:
+          - payload:
+              id: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              deviceId: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              sensorId: 64ca86da-1482-4d7e-9f0c-9adc8ba1e4cc
+              value: 5.0
+              username: Tyshawn
+              email: "user@example.org"

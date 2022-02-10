@@ -1,0 +1,36 @@
+@startuml
+actor User
+participant "Command service"
+participant "Broker"
+participant "Device management service"
+participant "Notification service"
+skinparam defaultTextAlignment center
+skinparam sequenceMessageAlign center
+
+User -> "Command service" : POST /command
+Activate "Command service"
+||7||
+"Command service" -> Broker : publish <font color=blue> value_set
+
+
+Activate Broker
+"Command service" --> User : Response OK
+Deactivate "Command service"
+||7||
+Broker --> "Notification service" : consume
+Activate "Notification service"
+Broker --> "Device management service" : consume
+Deactivate Broker
+Activate "Device management service"
+||7||
+"Device management service" -> Broker :  publish <font color=blue> value_set_approved
+
+Deactivate "Device management service"
+||7||
+Activate Broker
+Broker --> "Notification service" : consume
+Deactivate Broker
+
+"Notification service" -> "Notification service" : Send Email
+Deactivate "Notification service"
+@enduml
